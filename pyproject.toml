@@ -5,12 +5,18 @@ description = ""
 authors = ["joypauls <joypaulsen3@gmail.com>"]
 readme = "README.md"
 
+[tool.poetry.scripts]
+exify = "exify.cli:cli"
+
 [tool.poetry.dependencies]
 python = "^3.11"
 pillow = "^11.0.0"
 click = "^8.1.7"
 rich = "^13.9.3"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
 
 [build-system]
 requires = ["poetry-core"]

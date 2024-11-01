@@ -1,1 +1,3 @@
-# exify
+# Exify
+
+## Development
