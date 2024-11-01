@@ -2,7 +2,7 @@
 
 import click
 
-HELP_TEXT = "Planetary Flow v0.1.0"
+HELP_TEXT = "EXIFy v0.1.0"
 
 
 ##########################
@@ -11,26 +11,22 @@ HELP_TEXT = "Planetary Flow v0.1.0"
 
 
 @click.group(help=HELP_TEXT)
-def cli() -> None:
+@click.version_option()
+def cli():
     """Container object for the app"""
     click.echo("<CLI Root> beep boop")
 
 
-# @click.group(invoke_without_command=True)
-# @click.option('--name', '-n', default='World', help="Name to greet if no subcommand is provided.")
+# @click.group(invoke_without_command=True, help=HELP_TEXT)
+# @click.argument("file", type=click.Path(exists=True))
 # @click.pass_context
-# def cli(ctx, name):
-#     """A CLI tool for [Your Tool Description].
-
-#     Usage:
-#       mytool <argument>       Root level command.
-#       mytool greet --name NAME  Greet someone with a custom message.
-#     """
+# def cli(ctx, file):
+#     """Container object for the app"""
 #     if ctx.invoked_subcommand is None:
-#         # Root-level command behavior: Greet the user with the name provided.
-#         click.echo(f"Hello, {name}!")
+#         # root-level command behavior
+#         click.echo(f"Reading file {file}")
 #     else:
-#         # If a subcommand is called, this block is skipped.
+#         # if a subcommand is called, this block is skipped
 #         pass
 
 
@@ -63,7 +59,34 @@ def cli() -> None:
 ########################
 
 
-@cli.command()
+@cli.command(help="View the metadata of a file.")
+# @click.option(
+#     "-f",
+#     default=None,
+#     help="",
+# )
+@click.argument("file", type=click.Path(exists=True))
+def view(file):
+    click.echo(f"Reading file: {file}")
+
+
+@cli.command(help="Edit the metadata of a file.")
+# @click.option(
+#     "-f",
+#     default=None,
+#     help="",
+# )
+@click.argument("file", type=click.Path(exists=True))
+def edit(file):
+    click.echo(f"Reading file: {file}")
+
+
+########################
+# Development Commands #
+########################
+
+
+@cli.command(help="Puppet command for testing.")
 # @click.option(
 #     "-f",
 #     default=None,
