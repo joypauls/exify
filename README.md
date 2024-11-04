@@ -1,6 +1,6 @@
-# EXIFy
+# EXIFy 📷
 
-A CLI tool for examining, editing, and managing image EXIF metadata.
+A CLI tool for examining and managing image EXIF metadata, aimed at photographers.
 
 ## Installation
 

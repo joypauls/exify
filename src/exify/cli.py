@@ -1,13 +1,14 @@
-"""This is largely a dev utility for now, but it will be the primary entry point for the app."""
-
 import click
+from PIL import Image, ExifTags
+
+# from PIL.ExifTags import TAGS
 
 HELP_TEXT = "EXIFy v0.1.0"
 
 
-##########################
-# Primary User Interface #
-##########################
+######################
+# Root-Level Command #
+######################
 
 
 @click.group(help=HELP_TEXT)
@@ -59,7 +60,31 @@ def cli():
 ########################
 
 
-@cli.command(help="View the metadata of a file.")
+DEFAULT_TAG_NAMES = [
+    "DateTimeOriginal",
+    "Make",
+    "Model",
+    "LensMake",
+    "LensModel",
+    "FocalLength",
+    "ExposureTime",
+    "FNumber",
+    "ISOSpeedRatings",
+]
+DEFAULT_TAG_NAMES_MAP = {
+    "DateTimeOriginal": "Date & Time",
+    "Make": "Camera Make",
+    "Model": "Camera Model",
+    "LensMake": "Lens Make",
+    "LensModel": "Lens Model",
+    "FocalLength": "Focal Length",
+    "ExposureTime": "Shutter Speed",
+    "FNumber": "F-Stop",
+    "ISOSpeedRatings": "ISO",
+}
+
+
+@cli.command(help="View the metadata of an image file.")
 # @click.option(
 #     "-f",
 #     default=None,
@@ -68,17 +93,45 @@ def cli():
 @click.argument("file", type=click.Path(exists=True))
 def view(file):
     click.echo(f"Reading file: {file}")
+    image = Image.open(file)
+    exif_data = image._getexif()
+    # exif_data = extract_exif_data(image)
+    if exif_data:
+        processed_exif_data = {}
+        # first loop to process
+        for tag, value in exif_data.items():
+            if len(str(value)) > 50:
+                value = "<hidden>"
+            tag_name = ExifTags.TAGS.get(tag, tag)
+            if tag_name in DEFAULT_TAG_NAMES:
+                processed_exif_data[tag_name] = value
+
+        # all_exif = get_ifd_tags(exif_data)
+
+        # sorts the keys in the order of DEFAULT_TAG_NAMES
+        sorted_key_value_list = [
+            (key, processed_exif_data[key])
+            for key in DEFAULT_TAG_NAMES
+            if key in processed_exif_data
+        ]
+
+        # second loop to print
+        for key, value in sorted_key_value_list:
+            readable_key = DEFAULT_TAG_NAMES_MAP.get(key, key)
+            print(f"{readable_key}: {value}")
+    else:
+        print("No EXIF data found.")
 
 
-@cli.command(help="Edit the metadata of a file.")
-# @click.option(
-#     "-f",
-#     default=None,
-#     help="",
-# )
-@click.argument("file", type=click.Path(exists=True))
-def edit(file):
-    click.echo(f"Reading file: {file}")
+# @cli.command(help="Edit the metadata of a file.")
+# # @click.option(
+# #     "-f",
+# #     default=None,
+# #     help="",
+# # )
+# @click.argument("file", type=click.Path(exists=True))
+# def edit(file):
+#     click.echo(f"Reading file: {file}")
 
 
 ########################
@@ -86,12 +139,12 @@ def edit(file):
 ########################
 
 
-@cli.command(help="Puppet command for testing.")
-# @click.option(
-#     "-f",
-#     default=None,
-#     help="",
-# )
-@click.argument("file", type=click.Path(exists=True))
-def puppet(file):
-    click.echo(f"Reading file: {file}")
+# @cli.command(help="Puppet command for testing.")
+# # @click.option(
+# #     "-f",
+# #     default=None,
+# #     help="",
+# # )
+# @click.argument("file", type=click.Path(exists=True))
+# def puppet(file):
+#     click.echo(f"Reading file: {file}")

@@ -15,4 +15,4 @@ test:
 
 # puppet cli task
 puppet:
-	poetry run exify puppet ./test_images/osprey.tif
+	poetry run exify puppet ./test_images/osprey.jpg
