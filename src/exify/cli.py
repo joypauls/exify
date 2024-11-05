@@ -1,5 +1,8 @@
 import click
 from PIL import Image, ExifTags
+from rich.console import Console
+from rich.table import Table
+from typing import List, Tuple
 
 # from PIL.ExifTags import TAGS
 
@@ -64,7 +67,6 @@ DEFAULT_TAG_NAMES = [
     "DateTimeOriginal",
     "Make",
     "Model",
-    "LensMake",
     "LensModel",
     "FocalLength",
     "ExposureTime",
@@ -75,13 +77,22 @@ DEFAULT_TAG_NAMES_MAP = {
     "DateTimeOriginal": "Date & Time",
     "Make": "Camera Make",
     "Model": "Camera Model",
-    "LensMake": "Lens Make",
-    "LensModel": "Lens Model",
+    "LensModel": "Lens",
     "FocalLength": "Focal Length",
     "ExposureTime": "Shutter Speed",
     "FNumber": "F-Stop",
     "ISOSpeedRatings": "ISO",
 }
+
+
+# def print_exif(exif_list: List[Tuple[str, str]]):
+#     console = Console()
+#     table = Table(title="EXIF Data")
+#     table.add_column("Tag")
+#     table.add_column("Value")
+#     for tag, value in exif_list:
+#         table.add_row(tag, value)
+#     console.print(table)
 
 
 @cli.command(help="View the metadata of an image file.")
@@ -116,9 +127,17 @@ def view(file):
         ]
 
         # second loop to print
+        console = Console()
+        table = Table(title="EXIF Data")
+        table.add_column("Tag")
+        table.add_column("Value")
         for key, value in sorted_key_value_list:
             readable_key = DEFAULT_TAG_NAMES_MAP.get(key, key)
-            print(f"{readable_key}: {value}")
+            # print(readable_key.__class__)
+            # print(value.__class__)
+            table.add_row(readable_key, str(value))
+            # print(f"{readable_key}: {value}")
+        console.print(table)
     else:
         print("No EXIF data found.")
 
