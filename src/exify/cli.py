@@ -18,7 +18,7 @@ HELP_TEXT = "EXIFy v0.1.0"
 @click.version_option()
 def cli():
     """Container object for the app"""
-    click.echo("<CLI Root> beep boop")
+    # click.echo("<CLI Root> beep boop")
 
 
 # @click.group(invoke_without_command=True, help=HELP_TEXT)
@@ -85,6 +85,12 @@ DEFAULT_TAG_NAMES_MAP = {
 }
 
 
+def decimal_to_fraction(x: float) -> str:
+    from fractions import Fraction
+
+    return str(Fraction(x).limit_denominator())
+
+
 # def print_exif(exif_list: List[Tuple[str, str]]):
 #     console = Console()
 #     table = Table(title="EXIF Data")
@@ -103,7 +109,7 @@ DEFAULT_TAG_NAMES_MAP = {
 # )
 @click.argument("file", type=click.Path(exists=True))
 def view(file):
-    click.echo(f"Reading file: {file}")
+    # click.echo(f"Reading file: {file}")
     image = Image.open(file)
     exif_data = image._getexif()
     # exif_data = extract_exif_data(image)
@@ -116,6 +122,9 @@ def view(file):
             tag_name = ExifTags.TAGS.get(tag, tag)
             if tag_name in DEFAULT_TAG_NAMES:
                 processed_exif_data[tag_name] = value
+                # special handling for ExposureTime
+                if tag_name == "ExposureTime":
+                    processed_exif_data[tag_name] = decimal_to_fraction(value)
 
         # all_exif = get_ifd_tags(exif_data)
 
@@ -128,7 +137,7 @@ def view(file):
 
         # second loop to print
         console = Console()
-        table = Table(title="EXIF Data")
+        table = Table(title=f"Exif Data ({file})")
         table.add_column("Tag")
         table.add_column("Value")
         for key, value in sorted_key_value_list:
