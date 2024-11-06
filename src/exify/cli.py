@@ -85,6 +85,12 @@ DEFAULT_TAG_NAMES_MAP = {
 }
 
 
+def get_file_name_from_path(path):
+    import os
+
+    return os.path.basename(path)
+
+
 def decimal_to_fraction(x: float) -> str:
     from fractions import Fraction
 
@@ -137,7 +143,9 @@ def view(file):
 
         # second loop to print
         console = Console()
-        table = Table(title=f"Exif Data ({file})")
+        table = Table(
+            title=f"[bold purple]Exif Data[/] ({get_file_name_from_path(file)})"
+        )
         table.add_column("Tag")
         table.add_column("Value")
         for key, value in sorted_key_value_list:
