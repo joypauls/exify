@@ -2,7 +2,10 @@ import click
 from PIL import Image, ExifTags
 from rich.console import Console
 from rich.table import Table
-from typing import List, Tuple
+
+from exify.utils import decimal_to_fraction, get_file_name_from_path
+
+# from typing import List, Tuple
 
 # from PIL.ExifTags import TAGS
 
@@ -83,18 +86,6 @@ DEFAULT_TAG_NAMES_MAP = {
     "FNumber": "F-Stop",
     "ISOSpeedRatings": "ISO",
 }
-
-
-def get_file_name_from_path(path):
-    import os
-
-    return os.path.basename(path)
-
-
-def decimal_to_fraction(x: float) -> str:
-    from fractions import Fraction
-
-    return str(Fraction(x).limit_denominator())
 
 
 # def print_exif(exif_list: List[Tuple[str, str]]):
