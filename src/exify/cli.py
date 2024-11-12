@@ -2,14 +2,16 @@ import click
 from PIL import Image, ExifTags
 from rich.console import Console
 from rich.table import Table
+from rich import box
 
+from exify import __version__
 from exify.utils import decimal_to_fraction, get_file_name_from_path
 
 # from typing import List, Tuple
 
 # from PIL.ExifTags import TAGS
 
-HELP_TEXT = "EXIFy v0.1.0"
+HELP_TEXT = f"Exify {__version__}"
 
 
 ######################
@@ -135,7 +137,8 @@ def view(file):
         # second loop to print
         console = Console()
         table = Table(
-            title=f"[bold purple]Exif Data[/] ({get_file_name_from_path(file)})"
+            title=f"[bold purple]Exif Data[/] ({get_file_name_from_path(file)})",
+            box=box.HORIZONTALS,
         )
         table.add_column("Tag")
         table.add_column("Value")

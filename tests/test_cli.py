@@ -5,7 +5,7 @@ from exify.cli import cli
 def test_help_flag():
     runner = CliRunner()
     result = runner.invoke(cli, ["--help"])
-    expected_text = "EXIFy"
+    expected_text = "Exify"
     assert result.exit_code == 0
     assert expected_text in result.output
 
