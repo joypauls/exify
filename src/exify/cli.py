@@ -137,10 +137,12 @@ def view(file):
         # second loop to print
         console = Console()
         table = Table(
-            title=f"[bold purple]Exif Data[/] ({get_file_name_from_path(file)})",
-            box=box.HORIZONTALS,
+            title=f"[bold purple]Image Metadata[/] ({get_file_name_from_path(file)})",
+            box=box.ROUNDED,
+            show_header=False,
+            show_lines=True,
         )
-        table.add_column("Tag")
+        table.add_column("Attribute")
         table.add_column("Value")
         for key, value in sorted_key_value_list:
             readable_key = DEFAULT_TAG_NAMES_MAP.get(key, key)
